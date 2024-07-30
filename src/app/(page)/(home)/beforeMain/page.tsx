@@ -2,7 +2,7 @@
 
 import FirstMenu from "@/app/component/navigation/fristMenu";
 import { Search } from "@/app/component/search/search";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import AdBox from "@/app/component/main/adBox";
 import { WhiteBox } from "@/app/component/style/whiteBox";
 import TransJisu from "@/app/component/main/transJisu";
@@ -50,7 +50,9 @@ export default function BeforeHome() {
             <button className="h-1/3 w-full truncate" onClick={() => setBtn(3)}><WhiteBox style="h-full text-center content-center bg-white" >주요 <br />지수</WhiteBox></button>
           </div>
 
-          <div className="col-span-3 h-full w-full" ><WhiteBox children={handleCharts(btn)} style="w-full h-full content-center" /></div>
+          <div className="col-span-3 h-full w-full" >
+            <WhiteBox style="w-full h-full content-center"><Suspense>{handleCharts(btn)}</Suspense></WhiteBox>
+            </div>
         </div>
 
         <div className="w-full h-[70px] my-[30px] "><FirstMenu /></div>

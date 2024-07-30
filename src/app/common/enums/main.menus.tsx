@@ -1,5 +1,6 @@
 import MiniProfile from "@/app/component/myprofile/miniProfile"
 import Timer from "@/app/component/util/timer"
+import Image from "next/image"
 
 export const HeaderMenus: IMenu[] =[
     { id: 1, title: "ggunLogo", href: `/` },
@@ -21,7 +22,7 @@ export const MyHeaderMenus: IMenu[] =[
     { id: 6, title: "고객센터", href: `/articles/list/2` },
     { id: 7, title: <Timer />, href: `` },
     { id: 8, title: "Login", href: `/login` },
-    { id: 9, title: <MiniProfile />, href: `/` },
+    // { id: 9, title: <Image src={"/imgs/user.gif"} alt={"user"} fill sizes="100%" priority className="rounded-full" />, href: `/` },
 ]
 
 export const AcountMenus: IMenu[] = [

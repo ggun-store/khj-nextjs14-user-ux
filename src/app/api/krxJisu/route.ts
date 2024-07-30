@@ -1,4 +1,5 @@
 'use server'
+import Today from "@/app/common/date/today";
 import Yesterday from "@/app/common/date/yesterday";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,26 +18,41 @@ import { NextRequest, NextResponse } from "next/server";
 // 12	상장시가총액	MKTCAP	string()
 
 export async function GET(req: NextRequest) {
-    const code = ['USD', 'CNH', 'EUR', 'JPY(100)'];
-    const data: IExchange[] = [];
-    // console.log("KRX JISU!!!" + `${process.env.KRX_DEV_API_URL}?AUTH_KEY=${process.env.KRX_DEV_API_KEY}&basDd=${Yesterday()}`)
-    try {
-        const response = await fetch(`${process.env.KRX_DEV_API_URL}?AUTH_KEY=${process.env.KRX_DEV_API_KEY}&basDd=${Yesterday()}`);
-       
+    async function fetchData(date: string): Promise<IKrx[]> {
+        const response = await fetch(`${process.env.KRX_DEV_API_URL}?AUTH_KEY=${process.env.KRX_DEV_API_KEY}&basDd=${date}`);
+        // console.log("KRX JISU!!!" + `${process.env.KRX_DEV_API_URL}?AUTH_KEY=${process.env.KRX_DEV_API_KEY}&basDd=${date}`);
+        
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
 
-        const res: IKrx[] = await response.json();
-        
+        const res: IKrxResponse = await response.json();
+        return res.OutBlock_1;
+    }
+
+    try {
+        let date = new Date(); 
+        let res = await fetchData(Today());
+        let attempts = 0;
+
+        while (res.length === 0 && attempts < 7) {
+            date = new Date(); 
+            date.setDate(date.getDate() - (attempts + 1)); 
+            const formattedDate = Yesterday(date); 
+            res = await fetchData(formattedDate);
+            attempts++;
+            // console.log("Retrying with date: ", formattedDate);
+        }
+
         // console.log("KRX JISU : ", res);
 
         if (res.length === 0) {
-            return NextResponse.json({ error: "data NOT FOUND" }, { status: 404 });
+            return NextResponse.json({ error: "No data found for both today and yesterday" }, { status: 404 });
         }
 
         return NextResponse.json(res);
     } catch (error) {
-        console.log("KRX JISU err : " + error)
+        console.log("KRX JISU err : " + error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

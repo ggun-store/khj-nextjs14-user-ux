@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from 'next/navigation'
 import { AcountMenus, AiMenus, BoardMenus, HeaderMenus, MyHeaderMenus } from "@/app/common/enums/main.menus";
+import MiniProfile from "../myprofile/miniProfile";
 
 
 export default function MyHeaderLink() {
@@ -54,8 +55,8 @@ export default function MyHeaderLink() {
                         </div>
                     </div>
                 </li>
-            ))
-            }
+            ))}
+             <li className="group/item "><MiniProfile /></li>
         </ul>
     );
 };

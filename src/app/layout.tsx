@@ -32,7 +32,7 @@ export default function RootLayout({
             {/* {parseCookies().accessToken != undefined ? */}
             <div className="h-[95px]">
               <div className="fixed h-[50px] top-0 left-0 fixed z-30 ">
-                <JisuBenner/>
+                {/* <JisuBenner/> */}
                 {/* <Header /> */}
                 <MyHeader />
               </div>

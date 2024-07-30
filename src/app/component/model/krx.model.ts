@@ -1,3 +1,8 @@
+interface IKrxResponse {
+    length: number;
+    OutBlock_1: IKrx[];
+}
+
 interface IKrx {
     BAS_DD: string,
     IDX_CLSS: string,

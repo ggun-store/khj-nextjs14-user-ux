@@ -32,14 +32,16 @@ import Today from "@/app/common/date/today";
 // 매매기준율	
 // KFTC_BKPR	String	서울외국환중개
 // 장부가격	
-
 export async function GET(req: NextRequest) {
     const code = ['USD', 'CNH', 'EUR', 'JPY(100)'];
     const data: IExchange[] = [];
-    console.log("findExchangeByCodeAPI URL!!!" + `${process.env.EXCHANGE_API_URL}?authkey=${process.env.EXCHANGE_API_KEY}&searchdate=${Today()}&data=AP01`)
+    const url = `${process.env.EXCHANGE_API_URL}?authkey=${process.env.EXCHANGE_API_KEY}&searchdate=${Today()}&data=AP01`;
+
+    console.log("findExchangeByCodeAPI URL!!!", url);
+    
     try {
-        const response = await fetch(`${process.env.EXCHANGE_API_URL}?authkey=${process.env.EXCHANGE_API_KEY}&searchdate=${Today()}&data=AP01`);
-       
+        const response = await fetch(url);
+
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -50,10 +52,9 @@ export async function GET(req: NextRequest) {
             if (code.includes(v.cur_unit)) {
                 data.push(v);
             }
-        }
-    );
+        });
 
-        console.log("findExchangeByCodeAPI data : ", data);
+        // console.log("findExchangeByCodeAPI data : ", data);
 
         if (data.length === 0) {
             return NextResponse.json({ error: "data NOT FOUND" }, { status: 404 });
@@ -61,6 +62,7 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json(data);
     } catch (error) {
-        console.log("findExchangeByCodeAPI err : " + error)
+        console.error("findExchangeByCodeAPI err : " + error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

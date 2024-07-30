@@ -1,9 +1,11 @@
-export default function Yesterday(){
-    const date = new Date();
-    date.setDate(date.getDate() - 1);
-    const yyyy = date.getFullYear();
-    const MM = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
+export default function Yesterday(today: Date): string{
     
-    return `${yyyy}${MM}${dd}`
+    const previousDate = new Date(today);
+    previousDate.setDate(previousDate.getDate() - 1);
+
+    const yyyy = previousDate.getFullYear();
+    const MM = String(previousDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(previousDate.getDate()).padStart(2, '0');
+
+    return `${yyyy}${MM}${dd}`;
 }
